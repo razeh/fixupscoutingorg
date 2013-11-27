@@ -17,12 +17,20 @@ def fix_all_usage(body):
 
 def fix_drivers_license(body):
     """ Fix the drivers license number entry.   fix_all_usage must be applied first."""
-    body = body.replace("""frmCtl.elements["lblDrvNum"]""",
-                        """frmCtl.elements["txtDrvLicenseNum"]""")
+    body = body.replace("""var ctllblDrvNum = frmCtl.elements["lblDrvNum"]""",
+                        """var ctllblDrvNum = frmCtl.elements["txtDrvLicenseNum"];
+       if (typeof ctllblDrvNum == "undefined") {
+       ctllblDrvNum = frmCtl.elements["hdnlblDrvNum"];
+       }
+""")
     body = body.replace("""frmCtl.hdnlblDrvNum.value = ctllblDrvNum.innerText """,
                         """frmCtl.hdnlblDrvNum.value = ctllblDrvNum.value """)
     body = body.replace("""var ctllblDrvState = frmCtl.elements["lblDrvState"] ;""",
-                        """var ctllblDrvState = frmCtl.elements["txtDrvLicenseState"] ;""")
+                        """var ctllblDrvState = frmCtl.elements["txtDrvLicenseState"] ;
+       if (typeof ctllblDrvState == "undefined") {
+            ctllblDrvState = frmCtl.elements["hdnlblDrvNum"];
+       }
+""")
     body = body.replace("""rmCtl.hdnlblDrvState.value = ctllblDrvState.innerText ;""",
                         """rmCtl.hdnlblDrvState.value = ctllblDrvState.value ;""")
     return body
